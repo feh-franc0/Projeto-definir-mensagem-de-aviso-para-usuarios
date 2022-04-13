@@ -112,65 +112,45 @@ io.on('connection', (socket) => { // abre a escuta de eventos
             // io.emit('recebeTempo',{title,time})
         })
 
-
-
-        //* https://mongoosejs.com/docs/tutorials/findoneandupdate.html
-
-
-
-
-        // //? CONTADOR 
-        
-        function intervalFunc() {
-                    
-
-                    const links = mongoose.model('Link', linkSchema)
-
-                    links.find({identificador:"123321"}).then(doc=>{
-                        // var title= doc[0].title
-                        // var time= doc[0].timestamp
-                        // time -= 1000;
-                        // console.log("title: "+title)
-                        // console.log("time: "+time)
-                    
-                    if (doc[0].timestamp > 0) {
-                        
-                        var time= doc[0].timestamp
-                        time -= 10000;
-                        console.log("time: "+time)
-
-                        const filter = { identificador:123321 };
-                        const update = 
-                        { 
-                            timestamp: time
-                        };
-                            
-                        let document = links.findOneAndUpdate(filter, update).then(()=>{
-
-                            console.log("doc",doc)
-
-                            document = links.findOne(filter);
-                            doc.title; // 'Jean-Luc Picard'
-                            doc.timestamp; // undefined
-                        });
-                    } else {
-                        console.log("time é maior que 0(ZERO)")
-                        // clearInterval(intervalFunc);
-                    }
-
-
-                
-            })
-        }
-
-
-        // executa a cada segundo
-        setInterval(intervalFunc, 10000)
-        
-
-
-
 })//fecha escuta de eventos
 
 
+
+//? teste 2
+
+async function funcinterval() {
+
+        const links = await mongoose.model('Link', linkSchema)
+
+        let document = await links.findOneAndUpdate({ identificador:123321 })
+
+        // console.log(document.timestamp)
+
+        if(document.timestamp > 0) {
+
+            var time = document.timestamp
+            time -= 1000;
+            // console.log("time"+time)
+
+            const filter = { identificador:123321 };
+            const update = { timestamp: time };
+
+            let documento = await links.findOneAndUpdate(filter, update)
+
+                // console.log("doc", documento)
+                console.log(document.timestamp)
+
+                documento = await links.findOne({ identificador:123321 });
+                documento.title;
+                documento.timestamp;
+
+                
+
+        }else{
+            console.log("time é menor que 0(Zero)")
+        }
+
+    }
+
+setInterval(funcinterval, 1000)
 
